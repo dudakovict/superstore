@@ -13,14 +13,14 @@ public class CategoryProfit {
 		DataStream<String> data = env.readTextFile("./Users/Timon/eclipse-workspace/SuperstoreReduced.txt");
 		DataStream<Tuple5<String, String, String, Integer, Double>> mapped = data.map(new Splitter());
 		DataStream<Tuple5<String, String, String, Integer, Double>> reduced = mapped.keyBy(1).reduce(new Reduce1());
-		DataStream<Tuple2<String, Double>> profitPerMonth = reduced
+		DataStream<Tuple2<String, Double>> profitPerCategory = reduced
 				.map(new MapFunction<Tuple5<String, String, String, Integer, Double>, Tuple2<String, Double>>() {
 					public Tuple2<String, Double> map(Tuple5<String, String, String, Integer, Double> input) {
 						return new Tuple2<String, Double>(input.f1, input.f4);
 					}
 				});
 
-		profitPerMonth.print();
+		profitPerCategory.print();
 		
 		env.execute("Profit per category");
 	}
